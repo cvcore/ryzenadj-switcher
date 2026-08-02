@@ -1,0 +1,10 @@
+{
+  "uuid": "ryzenadj-switcher@cvcore.github.io",
+  "name": "RyzenAdj Switcher",
+  "description": "Monitor and control AMD Ryzen mobile CPU power limits via RyzenAdj.\n\nShows the active profile and live package power in the top bar. Switch between fully configurable power profiles and performance modes from the dropdown menu.\n\nRequires the RyzenAdj command-line tool and a one-time passwordless-sudo setup (guided, transparent and least-privilege) available from the extension preferences.\n\nRisks: changing CPU power and temperature limits can cause instability, crashes and data loss, and may void your hardware warranty. Use at your own risk; this software comes with absolutely no warranty.",
+  "url": "https://github.com/cvcore/ryzenadj-switcher",
+  "version-name": "1.0",
+  "shell-version": ["46", "47", "48", "49", "50"],
+  "settings-schema": "org.gnome.shell.extensions.ryzenadj",
+  "gettext-domain": "ryzenadj-switcher@cvcore.github.io"
+}

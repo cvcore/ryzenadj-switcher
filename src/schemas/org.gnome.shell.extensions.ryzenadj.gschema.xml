@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="ryzenadj-switcher@cvcore.github.io">
+  <schema id="org.gnome.shell.extensions.ryzenadj" path="/org/gnome/shell/extensions/ryzenadj/">
+    <key name="binary-path" type="s">
+      <default>''</default>
+      <summary>Path to the RyzenAdj binary</summary>
+      <description>Absolute path to the RyzenAdj executable. Leave empty to autodetect from PATH and common install locations.</description>
+    </key>
+    <key name="profiles" type="s">
+      <default>''</default>
+      <summary>Power profiles</summary>
+      <description>JSON array of power profiles. Each entry has id, name, stapm/fast/slow (watts) and tctl (°C). An empty string means the built-in defaults.</description>
+    </key>
+    <key name="poll-interval" type="i">
+      <default>5</default>
+      <range min="1" max="120"/>
+      <summary>Refresh interval in seconds</summary>
+      <description>How often power metrics are read via ryzenadj --info.</description>
+    </key>
+    <key name="auto-apply-profile" type="b">
+      <default>false</default>
+      <summary>Re-apply the last selected profile automatically</summary>
+      <description>Some systems reset CPU power limits after a reboot, on resume, or when the charger state changes. When enabled, the last profile applied from the menu is restored at those points.</description>
+    </key>
+    <key name="last-profile" type="s">
+      <default>''</default>
+      <summary>Id of the last profile applied from the menu</summary>
+      <description>Recorded on every profile apply, independent of auto-apply-profile. Also disambiguates profiles whose limits are identical.</description>
+    </key>
+    <key name="performance-mode" type="s">
+      <choices>
+        <choice value="default"/>
+        <choice value="power-saving"/>
+        <choice value="max-performance"/>
+      </choices>
+      <default>'default'</default>
+      <summary>Selected performance mode</summary>
+      <description>One of 'default', 'power-saving', 'max-performance'. The platform flips these automatically on AC plug/unplug, so the selection is persisted here and re-asserted by the extension on power-source changes. 'default' means the platform manages itself.</description>
+    </key>
+    <key name="panel-rows" type="i">
+      <default>2</default>
+      <range min="1" max="2"/>
+      <summary>Number of text rows in the panel widget</summary>
+    </key>
+    <key name="panel-font-family" type="s">
+      <default>''</default>
+      <summary>Font family for the panel widget</summary>
+      <description>Empty string follows the system interface font (org.gnome.desktop.interface font-name).</description>
+    </key>
+    <key name="row1-content" type="as">
+      <default>['profile']</default>
+      <summary>Content tokens for panel row 1</summary>
+    </key>
+    <key name="row2-content" type="as">
+      <default>['power']</default>
+      <summary>Content tokens for panel row 2</summary>
+    </key>
+    <key name="row1-dim" type="b">
+      <default>true</default>
+      <summary>Dim panel row 1</summary>
+    </key>
+    <key name="row2-dim" type="b">
+      <default>false</default>
+      <summary>Dim panel row 2</summary>
+    </key>
+  </schema>
+</schemalist>

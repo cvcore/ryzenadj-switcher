@@ -1,0 +1,58 @@
+/* Panel indicator: one or two configurable rows, auto-sized to the bar height */
+.ryzenadj-stack {
+    spacing: 0px;
+    padding: 0 2px;
+}
+
+/* font family and auto-fitted size are applied as a Pango description */
+.ryzenadj-line {
+    padding: 0;
+    margin: 0;
+}
+
+.ryzenadj-warn-label {
+    font-size: 10px;
+}
+
+/* Dropdown: section headings */
+.ryzenadj-section-title {
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
+/* Dropdown: live stats grid */
+.ryzenadj-stats {
+    spacing: 4px;
+    min-width: 220px;
+}
+
+.ryzenadj-stat-row {
+    spacing: 16px;
+}
+
+.ryzenadj-stat-value {
+    font-family: monospace;
+}
+
+/* Wattage hint on profile rows */
+/* inherits the popup menu item font size */
+.ryzenadj-item-watts {
+    font-family: monospace;
+    padding-left: 16px;
+}
+
+/* Hover tooltip for menu items */
+.ryzenadj-tooltip {
+    background-color: rgba(24, 24, 24, 0.95);
+    color: #eeeeec;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 0.9em;
+    max-width: 260px;
+}
+
+/* Warning text in the menu */
+.ryzenadj-warn-text {
+    max-width: 280px;
+}

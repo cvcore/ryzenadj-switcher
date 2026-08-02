@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish extension zip
+    runs-on: ubuntu-latest
+    container: fedora:42
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install toolchain
+        run: dnf install -y --setopt=install_weak_deps=False gjs glib2-devel jq zip
+
+      - name: Unit tests
+        run: ./tests/run.sh
+
+      - name: Stamp version-name from the tag
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          [ -n "$version" ] || { echo "::error::empty version from tag"; exit 1; }
+          jq --arg v "$version" '.["version-name"] = $v' src/metadata.json > metadata.tmp
+          mv metadata.tmp src/metadata.json
+          jq -c '{uuid, name, "version-name", "shell-version"}' src/metadata.json
+
+      - name: Build zip
+        id: build
+        run: |
+          glib-compile-schemas --strict src/schemas
+          uuid=$(jq -r .uuid src/metadata.json)
+          (cd src && zip -r -q "../${uuid}.shell-extension.zip" .)
+          unzip -l "${uuid}.shell-extension.zip"
+          echo "zip=${uuid}.shell-extension.zip" >> "$GITHUB_OUTPUT"
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.build.outputs.zip }}
+          generate_release_notes: true
+          body: |
+            Install from the attached zip, or from extensions.gnome.org once
+            this version is reviewed:
+
+            ```sh
+            gnome-extensions install --force ${{ steps.build.outputs.zip }}
+            ```
+
+            Then log out and back in.

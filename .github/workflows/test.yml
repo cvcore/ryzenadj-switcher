@@ -1,0 +1,66 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit:
+    name: GJS tests (${{ matrix.image }})
+    runs-on: ubuntu-latest
+    container: ${{ matrix.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # One row per Fedora release we can get; the GNOME version each one
+        # ships is derived at run time, not hardcoded (see the check below).
+        image:
+          - fedora:40
+          - fedora:41
+          - fedora:42
+          - fedora:43
+          - fedora:44
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install toolchain
+        run: dnf install -y --setopt=install_weak_deps=False gjs glib2-devel jq
+
+      - name: Versions
+        run: |
+          gjs --version
+          echo "Fedora: $(rpm -E %fedora)"
+
+      - name: Unit tests
+        run: ./tests/run.sh
+
+      - name: Compile GSettings schema
+        run: glib-compile-schemas --strict src/schemas
+
+      - name: metadata.json is well formed
+        run: |
+          jq -e '.uuid and .name and .["settings-schema"] and (.["shell-version"] | length > 0)' \
+            src/metadata.json > /dev/null
+          echo "uuid: $(jq -r .uuid src/metadata.json)"
+
+      # Ties the matrix to metadata.json: whichever GNOME Shell this Fedora
+      # ships must be a version we claim to support, so the two lists cannot
+      # drift apart in either direction.
+      - name: Declared shell-version covers this distro's GNOME
+        env:
+          IMAGE: ${{ matrix.image }}
+        run: |
+          gnome_version=$(dnf repoquery --quiet --qf '%{version}' gnome-shell | sort -V | tail -1)
+          gnome_major=${gnome_version%%.*}
+          mapping="\`${IMAGE}\` ships GNOME Shell ${gnome_version} (major ${gnome_major})"
+          echo "$mapping"                        # visible in `gh run view --log`
+          echo "$mapping" >> "$GITHUB_STEP_SUMMARY"
+          if ! jq -e --arg v "$gnome_major" '.["shell-version"] | index($v)' \
+               src/metadata.json > /dev/null; then
+            echo "::error::GNOME $gnome_major is not listed in metadata.json shell-version"
+            jq -c '.["shell-version"]' src/metadata.json
+            exit 1
+          fi
