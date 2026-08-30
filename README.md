@@ -3,7 +3,7 @@
 Monitor and control AMD Ryzen mobile CPU power limits from the GNOME top bar,
 powered by [RyzenAdj](https://github.com/FlyGoat/RyzenAdj).
 
-![Preview](doc/images/preview.png)
+<img src="doc/images/preview.png" width="700" />
 
 Supports GNOME Shell **46 – 50**.
 
