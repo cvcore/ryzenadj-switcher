@@ -17,6 +17,11 @@ import {sanitizeTokens, formatRow, maxFontPx} from './lib/panelformat.js';
 const DIM = 160; // St actor opacity for secondary text, theme-agnostic
 const MIN_FONT_PX = 6;
 
+// St.BoxLayout gained `orientation` in GNOME 48 and dropped `vertical` in 51.
+const VERTICAL = 'orientation' in St.BoxLayout.prototype
+    ? {orientation: Clutter.Orientation.VERTICAL}
+    : {vertical: true};
+
 const APPEARANCE_KEYS = [
     'panel-rows', 'panel-font-family',
     'row1-content', 'row2-content', 'row1-dim', 'row2-dim',
@@ -182,7 +187,7 @@ class RyzenAdjIndicator extends PanelMenu.Button {
 
         // Configurable text rows (1 or 2), rebuilt by _updatePanelConfig().
         this._stack = new St.BoxLayout({
-            vertical: true,
+            ...VERTICAL,
             style_class: 'ryzenadj-stack',
             y_align: Clutter.ActorAlign.CENTER,
             clip_to_allocation: true,
@@ -294,7 +299,7 @@ class RyzenAdjIndicator extends PanelMenu.Button {
 
         // Live metrics, non-interactive.
         this._statsItem = new PopupMenu.PopupBaseMenuItem({reactive: false, can_focus: false});
-        const statsBox = new St.BoxLayout({vertical: true, style_class: 'ryzenadj-stats', x_expand: true});
+        const statsBox = new St.BoxLayout({...VERTICAL, style_class: 'ryzenadj-stats', x_expand: true});
         this._rows = {
             stapm: new StatRow(_('Sustained (STAPM)')),
             fast: new StatRow(_('Fast boost (PPT)')),
