@@ -5,7 +5,7 @@ powered by [RyzenAdj](https://github.com/FlyGoat/RyzenAdj).
 
 <img src="doc/images/preview.png" width="700" />
 
-Supports GNOME Shell **46 – 50**.
+Supports GNOME Shell **46 – 51**.
 
 ## Requirements
 
