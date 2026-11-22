@@ -22,6 +22,7 @@ jobs:
           - fedora:42
           - fedora:43
           - fedora:44
+          - fedora:45
 
     steps:
       - uses: actions/checkout@v5
